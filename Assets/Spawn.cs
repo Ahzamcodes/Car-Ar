@@ -10,6 +10,7 @@ public class Spawn : MonoBehaviour
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
     [SerializeField] GameObject prefab;
     [SerializeField] ARPlaneManager planeManager;
+    GameObject spawned;
 
     // Start is called before the first frame update
     void Start()
@@ -22,11 +23,13 @@ public class Spawn : MonoBehaviour
     {
         if (Input.touchCount == 0) return;
 
+        if(spawned != null) return;
+
         if (raycastManager.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon))
         {
             Pose pose = hits[0].pose;
 
-            GameObject obj = Instantiate(prefab, pose.position, Quaternion.identity);
+            spawned = Instantiate(prefab, pose.position, Quaternion.identity);
 
             foreach(ARPlane plane in planeManager.trackables)
             {
